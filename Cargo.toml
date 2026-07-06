@@ -1,5 +1,5 @@
 [package]
-name = "cosmic-session"
+name = "wmde-session"
 description = "The session manager for the COSMIC desktop environment"
 version = "1.0.0"
 license = "GPL-3.0-only"

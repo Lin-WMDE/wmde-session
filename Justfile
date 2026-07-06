@@ -32,11 +32,11 @@ clean-dist: clean
 install:
     echo {{ cosmic_dconf_profile }}
     # main binary
-    install -Dm0755 {{ cargo-target-dir }}/release/cosmic-session {{ bindir }}/cosmic-session
+    install -Dm0755 {{ cargo-target-dir }}/release/wmde-session {{ bindir }}/wmde-session
 
     # session start script
-    install -Dm0755 data/start-cosmic {{ bindir }}/start-cosmic
-    sed -i "s|DCONF_PROFILE=cosmic|DCONF_PROFILE={{ cosmic_dconf_profile }}|" {{ bindir }}/start-cosmic
+    install -Dm0755 data/start-wmde {{ bindir }}/start-wmde
+    sed -i "s|DCONF_PROFILE=cosmic|DCONF_PROFILE={{ cosmic_dconf_profile }}|" {{ bindir }}/start-wmde
 
     # systemd target
     install -Dm0644 data/cosmic-session.target {{ systemddir }}/cosmic-session.target

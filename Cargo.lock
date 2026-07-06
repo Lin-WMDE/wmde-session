@@ -299,32 +299,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "cosmic-session"
-version = "1.0.0"
-dependencies = [
- "color-eyre",
- "cosmic-dbus-a11y",
- "dirs",
- "freedesktop-desktop-entry",
- "futures-util",
- "launch-pad",
- "log-panics",
- "logind-zbus",
- "rustix",
- "scopeguard",
- "serde",
- "serde_json",
- "shell-words",
- "tokio",
- "tokio-util",
- "tracing",
- "tracing-journald",
- "tracing-subscriber",
- "zbus",
- "zbus_systemd",
-]
-
-[[package]]
 name = "crossbeam-utils"
 version = "0.8.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1740,6 +1714,32 @@ dependencies = [
  "serde_json",
  "unicode-xid",
  "wasmparser",
+]
+
+[[package]]
+name = "wmde-session"
+version = "1.0.0"
+dependencies = [
+ "color-eyre",
+ "cosmic-dbus-a11y",
+ "dirs",
+ "freedesktop-desktop-entry",
+ "futures-util",
+ "launch-pad",
+ "log-panics",
+ "logind-zbus",
+ "rustix",
+ "scopeguard",
+ "serde",
+ "serde_json",
+ "shell-words",
+ "tokio",
+ "tokio-util",
+ "tracing",
+ "tracing-journald",
+ "tracing-subscriber",
+ "zbus",
+ "zbus_systemd",
 ]
 
 [[package]]
