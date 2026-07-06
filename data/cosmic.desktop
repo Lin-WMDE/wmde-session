@@ -1,6 +1,6 @@
 [Desktop Entry]
-Name=COSMIC
-Comment=This session logs you into the COSMIC desktop
+Name=WMDE
+Comment=This session logs you into the WMDE desktop
 Comment[sv]=Denna session loggar in dig till skrivbordsmiljön COSMIC
 Exec=/usr/bin/start-wmde
 Type=Application
