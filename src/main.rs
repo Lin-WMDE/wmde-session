@@ -344,8 +344,8 @@ async fn start(
 	let span = info_span!(parent: None, "cosmic-greeter");
 	start_component("cosmic-greeter", span, &process_manager, &env_vars).await;
 
-	let span = info_span!(parent: None, "cosmic-files-applet");
-	start_component("cosmic-files-applet", span, &process_manager, &env_vars).await;
+	let span = info_span!(parent: None, "wmde-files-applet");
+	start_component("wmde-files-applet", span, &process_manager, &env_vars).await;
 
 	let span = info_span!(parent: None, "cosmic-idle");
 	start_component("cosmic-idle", span, &process_manager, &env_vars).await;
