@@ -1,28 +1,24 @@
 # Maintainer: WMDE <https://wmde.fun>
 # Contributor: System76 <info@system76.com> (original cosmic-session)
-# Builds our fork Lin-WMDE/wmde-session (branch wmde; master mirrors pop-os upstream).
-# Only change vs upstream 1.2: cosmic-session spawns `wmde-files-applet` (our renamed
-# desktop-icon applet) instead of `cosmic-files-applet`. Binary name, D-Bus name and
-# the other component spawns stay stock for IPC compatibility with the COSMIC 1.2 stack.
+#
+# Builds our fork Lin-WMDE/wmde-session (branch wmde). Standalone WMDE component:
+# ships the wmde-session binary, start-wmde, the wmde-session[-pre] systemd target,
+# the wayland-session entry (wmde.desktop, DesktopNames=WMDE), wmde-mimeapps.list and
+# the dconf `wmde` profile. Own D-Bus name fun.wmde.Session. SOLE owner of the session
+# files (wmde-comp installs none of them), so NO conflicts/replaces cosmic-session.
 pkgname=wmde-session
 pkgver=1.2.0
 pkgrel=1
-pkgdesc="WMDE session (fork of cosmic-session) - launches the WMDE/COSMIC desktop"
+pkgdesc="WMDE session (fork of cosmic-session) - launches the WMDE desktop"
 arch=('x86_64')
 url="https://wmde.fun"
 license=('GPL-3.0-only')
-# Same runtime components cosmic-session spawns; cosmic-files is satisfied by our
-# wmde-files (provides=cosmic-files), which ships the wmde-files-applet desktop layer.
-depends=('bash' 'cosmic-applets' 'cosmic-app-library' 'cosmic-bg' 'cosmic-comp'
-         'cosmic-files' 'cosmic-greeter' 'cosmic-icon-theme' 'cosmic-idle'
-         'cosmic-launcher' 'cosmic-notifications' 'cosmic-osd' 'cosmic-panel'
-         'cosmic-randr' 'cosmic-screenshot' 'cosmic-settings-daemon' 'cosmic-settings'
-         'cosmic-workspaces' 'libgcc' 'glibc' 'switcheroo-control'
-         'xdg-desktop-portal-cosmic' 'xorg-xwayland')
+# Runtime components the session spawns (minimal WMDE edition: comp, settings-daemon,
+# notifications, panel, bg, applets/files-applet, osd, launcher). orca is optional a11y.
+depends=('bash' 'wmde-comp' 'wmde-settings-daemon' 'wmde-notifications' 'wmde-panel'
+         'wmde-bg' 'wmde-applets' 'wmde-files' 'wmde-osd' 'wmde-launcher' 'wmde-icons'
+         'libgcc' 'glibc' 'xorg-xwayland')
 makedepends=('rust' 'cargo' 'just' 'git' 'clang' 'lld')
-provides=('cosmic-session')
-conflicts=('cosmic-session')
-replaces=('cosmic-session')
 source=("$pkgname::git+https://github.com/Lin-WMDE/wmde-session.git#branch=wmde")
 sha256sums=('SKIP')
 
@@ -41,8 +37,8 @@ build() {
 
 package() {
   cd "$srcdir/$pkgname"
-  # installs the cosmic-session binary, start-cosmic, systemd target, the
-  # wayland session .desktop, mimeapps and the dconf profile.
+  # installs the wmde-session binary, start-wmde, the wmde-session systemd target, the
+  # wayland session .desktop (wmde.desktop), wmde-mimeapps.list and the dconf wmde profile.
   just rootdir="$pkgdir" prefix=/usr install
   install -Dm644 LICENSE.md "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }

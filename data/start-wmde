@@ -9,7 +9,7 @@ if command -v systemctl >/dev/null; then
     # reset them so that they don't break this startup
     for unit in $(systemctl --user --no-legend --state=failed --plain list-units | cut -f1 -d' '); do
         partof="$(systemctl --user show -p PartOf --value "$unit")"
-        for target in cosmic-session.target graphical-session.target; do
+        for target in wmde-session.target graphical-session.target; do
             if [ "$partof" = "$target" ]; then
                 systemctl --user reset-failed "$unit"
                 break
@@ -28,8 +28,8 @@ if [ -n "${SHELL}" ]; then
     fi
 fi
 
-export XDG_CURRENT_DESKTOP="${XDG_CURRENT_DESKTOP:=COSMIC}"
-export XDG_SESSION_DESKTOP="${XDG_SESSION_DESKTOP:=COSMIC}"
+export XDG_CURRENT_DESKTOP="${XDG_CURRENT_DESKTOP:=WMDE}"
+export XDG_SESSION_DESKTOP="${XDG_SESSION_DESKTOP:=WMDE}"
 export XDG_SESSION_TYPE="${XDG_SESSION_TYPE:=wayland}"
 export _JAVA_AWT_WM_NONREPARENTING=1
 export GDK_BACKEND=wayland,x11
@@ -37,7 +37,7 @@ export MOZ_ENABLE_WAYLAND=1
 export QT_QPA_PLATFORM="wayland;xcb"
 export QT_AUTO_SCREEN_SCALE_FACTOR=1
 export QT_ENABLE_HIGHDPI_SCALING=1
-export DCONF_PROFILE=cosmic
+export DCONF_PROFILE=wmde
 
 # Set the QT platform theme to CuteCosmic. Fallback to qt6ct if CuteCosmic is not installed.
 if [ -z "$QT_QPA_PLATFORMTHEME" ]; then
@@ -106,7 +106,7 @@ if command -v systemctl >/dev/null; then
     done
 fi
 
-# Run cosmic-session
+# Run wmde-session
 if [[ -z "${DBUS_SESSION_BUS_ADDRESS}" ]]; then
     exec /usr/bin/dbus-run-session -- /usr/bin/wmde-session
 else

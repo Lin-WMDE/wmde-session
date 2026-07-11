@@ -2,7 +2,7 @@ rootdir := ''
 prefix := '/usr'
 cargo-target-dir := env('CARGO_TARGET_DIR', 'target')
 orca := '/usr/bin/orca'
-cosmic_dconf_profile := prefix + '/share/dconf/profile/cosmic'
+wmde_dconf_profile := prefix + '/share/dconf/profile/wmde'
 usrdir := absolute_path(clean(rootdir / prefix))
 bindir := usrdir / 'bin'
 systemddir := usrdir / 'lib' / 'systemd' / 'user'
@@ -30,25 +30,25 @@ clean-dist: clean
 
 # Installs files into the system
 install:
-    echo {{ cosmic_dconf_profile }}
+    echo {{ wmde_dconf_profile }}
     # main binary
     install -Dm0755 {{ cargo-target-dir }}/release/wmde-session {{ bindir }}/wmde-session
 
     # session start script
     install -Dm0755 data/start-wmde {{ bindir }}/start-wmde
-    sed -i "s|DCONF_PROFILE=cosmic|DCONF_PROFILE={{ cosmic_dconf_profile }}|" {{ bindir }}/start-wmde
+    sed -i "s|DCONF_PROFILE=wmde|DCONF_PROFILE={{ wmde_dconf_profile }}|" {{ bindir }}/start-wmde
 
     # systemd target
-    install -Dm0644 data/cosmic-session.target {{ systemddir }}/cosmic-session.target
+    install -Dm0644 data/wmde-session.target {{ systemddir }}/wmde-session.target
 
     # session
-    install -Dm0644 data/cosmic.desktop {{ sessiondir }}/cosmic.desktop
+    install -Dm0644 data/wmde.desktop {{ sessiondir }}/wmde.desktop
 
     # mimeapps
-    install -Dm0644 data/cosmic-mimeapps.list {{ applicationdir }}/cosmic-mimeapps.list
+    install -Dm0644 data/wmde-mimeapps.list {{ applicationdir }}/wmde-mimeapps.list
 
     # dconf profile
-    install -Dm644 data/dconf/profile/cosmic {{ rootdir }}/{{ cosmic_dconf_profile }}
+    install -Dm644 data/dconf/profile/wmde {{ rootdir }}/{{ wmde_dconf_profile }}
 
 # Vendor Cargo dependencies locally
 vendor:

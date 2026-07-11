@@ -39,8 +39,8 @@ fn parse_and_handle_ipc(state: &mut IpcState) {
 		}
 		Err(_) => {
 			warn!(
-				"Unknown session socket message, are you using incompatible cosmic-session and \
-				 cosmic-comp versions?"
+				"Unknown session socket message, are you using incompatible wmde-session and \
+				 wmde-comp versions?"
 			)
 		}
 	}
@@ -120,26 +120,26 @@ pub fn run_compositor(
 	};
 	mark_as_not_cloexec(&comp).expect("Failed to mark fd as not cloexec");
 	Ok(tokio::spawn(async move {
-		// Create a new process handler for cosmic-comp, with our compositor socket's
-		// file descriptor as the `COSMIC_SESSION_SOCK` environment variable.
+		// Create a new process handler for wmde-comp, with our compositor socket's
+		// file descriptor as the `WMDE_SESSION_SOCK` environment variable.
 		process_manager
 			.start_process(
 				Process::new()
 					.with_executable(exec)
 					.with_args(args)
-					.with_env([("COSMIC_SESSION_SOCK", comp.as_raw_fd().to_string())])
+					.with_env([("WMDE_SESSION_SOCK", comp.as_raw_fd().to_string())])
 					.with_on_exit(move |pman, _, err_code, _will_restart| {
 						let session_dbus_tx = session_dbus_tx.clone();
 						async move {
 							pman.stop();
 							if err_code == Some(0) {
-								info!("cosmic-comp exited successfully");
+								info!("wmde-comp exited successfully");
 								session_dbus_tx.send(SessionRequest::Exit).await.unwrap();
 							} else if let Some(err_code) = err_code {
-								error!("cosmic-comp exited with error code {}", err_code);
+								error!("wmde-comp exited with error code {}", err_code);
 								session_dbus_tx.send(SessionRequest::Restart).await.unwrap();
 							} else {
-								warn!("cosmic-comp exited by signal");
+								warn!("wmde-comp exited by signal");
 								session_dbus_tx.send(SessionRequest::Restart).await.unwrap();
 							}
 						}
