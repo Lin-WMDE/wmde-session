@@ -8,15 +8,16 @@
 # files (wmde-comp installs none of them), so NO conflicts/replaces cosmic-session.
 pkgname=wmde-session
 pkgver=1.2.0
-pkgrel=1
+pkgrel=2
 pkgdesc="WMDE session (fork of cosmic-session) - launches the WMDE desktop"
 arch=('x86_64')
 url="https://wmde.fun"
 license=('GPL-3.0-only')
 # Runtime components the session spawns (minimal WMDE edition: comp, settings-daemon,
-# notifications, panel, bg, applets/files-applet, osd, launcher). orca is optional a11y.
+# notifications, panel, bg, applets/files-applet, osd). The start-menu is a panel applet
+# (loaded by the panel, not spawned here); orca is optional a11y.
 depends=('bash' 'wmde-comp' 'wmde-settings-daemon' 'wmde-notifications' 'wmde-panel'
-         'wmde-bg' 'wmde-applets' 'wmde-files' 'wmde-osd' 'wmde-launcher' 'wmde-icons'
+         'wmde-bg' 'wmde-applets' 'wmde-files' 'wmde-osd' 'wmde-start-menu' 'wmde-icons'
          'wmde-portal' 'libgcc' 'glibc' 'xorg-xwayland')
 makedepends=('rust' 'cargo' 'just' 'git' 'clang' 'lld')
 source=("$pkgname::git+https://github.com/Lin-WMDE/wmde-session.git#branch=wmde")

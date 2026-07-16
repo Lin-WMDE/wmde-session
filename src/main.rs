@@ -326,9 +326,6 @@ async fn start(
 	);
 	drop(guard);
 
-	let span = info_span!(parent: None, "wmde-launcher");
-	start_component("wmde-launcher", span, &process_manager, &env_vars).await;
-
 	let span = info_span!(parent: None, "wmde-osd");
 	start_component("wmde-osd", span, &process_manager, &env_vars).await;
 
