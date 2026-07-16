@@ -5,7 +5,7 @@ version = "1.0.0"
 license = "GPL-3.0-only"
 edition = "2024"
 rust-version = "1.93"
-authors = ["Lucy <lucy@system76.com>"]
+authors = ["WMDE <https://wmde.fun>"]
 publish = false
 
 [dependencies]

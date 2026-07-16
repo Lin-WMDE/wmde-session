@@ -1,9 +1,6 @@
 [Default Applications]
 inode/directory=fun.wmde.files.desktop
 inode/mount-point=fun.wmde.files.desktop
-application/x-cd-image=com.system76.Popsicle.desktop
-application/x-raw-disk-image=com.system76.Popsicle.desktop
-application/x-raw-disk-image-xz-compressed=com.system76.Popsicle.desktop
 image/bmp=org.gnome.eog.desktop
 image/gif=org.gnome.eog.desktop
 image/jpeg=org.gnome.eog.desktop
@@ -147,7 +144,7 @@ application/vnd.oasis.opendocument.text-master=libreoffice-writer.desktop
 application/vnd.sun.xml.writer=libreoffice-writer.desktop
 application/vnd.sun.xml.writer.template=libreoffice-writer.desktop
 application/vnd.sun.xml.writer.global=libreoffice-writer.desktop
-eapplication/vnd.ms-word=libreoffice-writer.desktop
+application/vnd.ms-word=libreoffice-writer.desktop
 application/x-doc=libreoffice-writer.desktop
 application/x-hwp=libreoffice-writer.desktop
 application/vnd.wordperfect=libreoffice-writer.desktop
