@@ -34,7 +34,9 @@ fn parse_and_handle_ipc(state: &mut IpcState) {
 	match serde_json::from_slice::<Message>(&state.buf) {
 		Ok(Message::SetEnv { variables }) => {
 			if let Some(env_tx) = state.env_tx.take() {
-				env_tx.send(variables).unwrap();
+				if env_tx.send(variables).is_err() {
+					warn!("session env receiver dropped; not delivering wmde-comp env vars");
+				}
 			}
 		}
 		Err(_) => {
@@ -118,7 +120,7 @@ pub fn run_compositor(
 			.wrap_err("failed to mark compositor unix stream as blocking")?;
 		OwnedFd::from(std_stream)
 	};
-	mark_as_not_cloexec(&comp).expect("Failed to mark fd as not cloexec");
+	mark_as_not_cloexec(&comp).wrap_err("failed to mark compositor fd as not cloexec")?;
 	Ok(tokio::spawn(async move {
 		// Create a new process handler for wmde-comp, with our compositor socket's
 		// file descriptor as the `WMDE_SESSION_SOCK` environment variable.
@@ -134,19 +136,30 @@ pub fn run_compositor(
 							pman.stop();
 							if err_code == Some(0) {
 								info!("wmde-comp exited successfully");
-								session_dbus_tx.send(SessionRequest::Exit).await.unwrap();
+								if let Err(err) = session_dbus_tx.send(SessionRequest::Exit).await {
+									warn!(?err, "session service receiver gone; Exit request not delivered");
+								}
 							} else if let Some(err_code) = err_code {
 								error!("wmde-comp exited with error code {}", err_code);
-								session_dbus_tx.send(SessionRequest::Restart).await.unwrap();
+								if let Err(err) = session_dbus_tx.send(SessionRequest::Restart).await {
+									warn!(?err, "session service receiver gone; Restart request not delivered");
+								}
 							} else {
 								warn!("wmde-comp exited by signal");
-								session_dbus_tx.send(SessionRequest::Restart).await.unwrap();
+								if let Err(err) = session_dbus_tx.send(SessionRequest::Restart).await {
+									warn!(?err, "session service receiver gone; Restart request not delivered");
+								}
 							}
 						}
 					}),
 			)
 			.await
-			.expect("failed to launch compositor");
+			// This runs in a detached task whose JoinHandle is never awaited, so the
+			// `?` Err would otherwise vanish - log it explicitly so a failed compositor
+			// launch is diagnosable (the session's env_rx path only sees a generic
+			// "no env vars" timeout and would retry forever without this).
+			.inspect_err(|err| error!("failed to launch compositor: {err:?}"))
+			.wrap_err("failed to launch compositor")?;
 		// Create a new state object for IPC purposes.
 		let mut ipc_state = IpcState {
 			env_tx: Some(env_tx),

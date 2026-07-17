@@ -3,8 +3,10 @@ use color_eyre::eyre::Context;
 use launch_pad::ProcessKey;
 use launch_pad::process::Process;
 use rustix::fd::AsRawFd;
+use std::future::Future;
 use std::os::fd::OwnedFd;
 use std::os::unix::net::UnixStream;
+use std::pin::Pin;
 use std::sync::Arc;
 use tokio::sync::Mutex;
 use tracing::Instrument;
@@ -63,10 +65,16 @@ pub fn notifications_process(
 			}
 			.instrument(stderr_span)
 		})
-		.with_on_exit(move |pman, my_key, _, will_restart| {
+		.with_on_exit(move |pman, my_key, _, will_restart| -> Pin<Box<dyn Future<Output = ()> + Send>> {
 			// force restart of notifications / panel when the other exits
 			// also update the environment variables to use the new socket
-			let (my_fd, their_fd) = create_socket().expect("Failed to create notification socket");
+			let (my_fd, their_fd) = match create_socket() {
+				Ok(fds) => fds,
+				Err(err) => {
+					error!(?err, "failed to create notification socket on restart; not restarting {}", cmd);
+					return Box::pin(async {});
+				}
+			};
 			let mut my_env_vars = env_clone.clone();
 			if let Some((_k, v)) = my_env_vars
 				.iter_mut()
@@ -97,7 +105,7 @@ pub fn notifications_process(
 			let restart_key = restart_key.clone();
 
 			let mut pman_clone = pman.clone();
-			async move {
+			Box::pin(async move {
 				if will_restart {
 					if let Err(why) = pman_clone.update_process_env(&my_key, my_env_vars).await {
 						error!(?why, "Failed to update environment variables");
@@ -120,7 +128,7 @@ pub fn notifications_process(
 						*guard = Some(new);
 					}
 				}
-			}
+			})
 		})
 		.with_env(env_vars)
 }

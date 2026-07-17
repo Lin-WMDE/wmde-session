@@ -147,7 +147,7 @@ async fn start(
 
 	let mut env_vars = env_rx
 		.await
-		.expect("failed to receive environmental variables")
+		.wrap_err("failed to receive environmental variables from wmde-comp")?
 		.into_iter()
 		.collect::<Vec<_>>();
 	info!(
@@ -245,14 +245,14 @@ async fn start(
 					.instrument(stderr_span)
 				})
 				.with_on_exit(move |_, _, _, will_restart| {
-					if !will_restart && let Some(tx) = settings_exit_tx.lock().unwrap().take() {
+					if !will_restart && let Some(tx) = settings_exit_tx.lock().unwrap_or_else(|e| e.into_inner()).take() {
 						_ = tx.send(());
 					}
 					async {}
 				}),
 		)
 		.await
-		.expect("failed to start settings daemon");
+		.wrap_err("failed to start settings daemon")?;
 
 	// notifying the user service manager that we've reached the
 	// graphical-session.target, which should only happen after:
@@ -269,7 +269,7 @@ async fn start(
 	tokio::spawn(a11y::start_a11y(env_vars.clone(), process_manager.clone()));
 
 	let (panel_notifications_fd, daemon_notifications_fd) =
-		notifications::create_socket().expect("Failed to create notification socket");
+		notifications::create_socket().wrap_err("failed to create notification socket")?;
 
 	let mut daemon_env_vars = env_vars.clone();
 	daemon_env_vars.push((
@@ -303,7 +303,7 @@ async fn start(
 				panel_env_vars.clone(),
 			))
 			.await
-			.expect("failed to start notifications daemon"),
+			.wrap_err("failed to start notifications daemon")?,
 	);
 	drop(guard);
 
@@ -322,7 +322,7 @@ async fn start(
 				daemon_env_vars,
 			))
 			.await
-			.expect("failed to start panel"),
+			.wrap_err("failed to start panel")?,
 	);
 	drop(guard);
 
@@ -350,9 +350,9 @@ async fn start(
 
 		// system-wide directories
 		if let Some(xdg_config_dirs) = env::var_os("XDG_CONFIG_DIRS") {
-			let xdg_config_dirs = xdg_config_dirs
-				.into_string()
-				.expect("Invalid XDG_CONFIG_DIRS");
+			// Lossy conversion so a non-UTF8 XDG_CONFIG_DIRS degrades instead of
+			// aborting session startup.
+			let xdg_config_dirs = xdg_config_dirs.to_string_lossy().into_owned();
 			let dir_list = xdg_config_dirs.split(":");
 
 			for dir in dir_list {
@@ -443,8 +443,8 @@ async fn start(
 		info!("started {} programs", dedupe.len());
 	}
 
-	let mut sigterm = signal(SignalKind::terminate()).expect("Failed to bind SIGTERM handler");
-	let mut sigint = signal(SignalKind::interrupt()).expect("Failed to bind SIGINT handler");
+	let mut sigterm = signal(SignalKind::terminate()).wrap_err("failed to bind SIGTERM handler")?;
+	let mut sigint = signal(SignalKind::interrupt()).wrap_err("failed to bind SIGINT handler")?;
 	let mut status = Status::Exited;
 	let session_dbus_rx_next = session_rx.recv();
 	tokio::select! {
