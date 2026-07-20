@@ -332,6 +332,26 @@ async fn start(
 	let span = info_span!(parent: None, "wmde-bg");
 	start_component("wmde-bg", span, &process_manager, &env_vars).await;
 
+	// WMDE: ensure the standard XDG user dirs (Desktop, Documents, ...) exist before the
+	// files applet starts. It renders the desktop layer on ~/Desktop but does not create
+	// the folder, and the /etc/xdg/autostart xdg-user-dirs entry only runs in the autostart
+	// pass further below - so on a fresh account the applet would come up with no ~/Desktop
+	// and thus no desktop layer. Run xdg-user-dirs-update first; it writes
+	// ~/.config/user-dirs.dirs and creates the matching folders (the same file the applet
+	// reads via dirs::desktop_dir()), and is a no-op once they exist.
+	match tokio::process::Command::new("xdg-user-dirs-update")
+		.envs(env_vars.iter().cloned())
+		.status()
+		.await
+	{
+		Ok(status) if status.success() => {}
+		Ok(status) => warn!("xdg-user-dirs-update exited with {}", status),
+		Err(err) => warn!(
+			"failed to run xdg-user-dirs-update (is xdg-user-dirs installed?): {}",
+			err
+		),
+	}
+
 	let span = info_span!(parent: None, "wmde-files-applet");
 	start_component("wmde-files-applet", span, &process_manager, &env_vars).await;
 

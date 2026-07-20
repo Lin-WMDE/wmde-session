@@ -18,7 +18,7 @@ license=('GPL-3.0-only')
 # (loaded by the panel, not spawned here); orca is optional a11y.
 depends=('bash' 'wmde-comp' 'wmde-settings-daemon' 'wmde-notifications' 'wmde-panel'
          'wmde-bg' 'wmde-applets' 'wmde-files' 'wmde-osd' 'wmde-start-menu' 'wmde-icons'
-         'wmde-portal' 'libgcc' 'glibc' 'xorg-xwayland')
+         'wmde-portal' 'libgcc' 'glibc' 'xorg-xwayland' 'xdg-user-dirs')
 makedepends=('rust' 'cargo' 'just' 'git' 'clang' 'lld')
 source=("$pkgname::git+https://github.com/Lin-WMDE/wmde-session.git#branch=wmde")
 sha256sums=('SKIP')
