@@ -16,10 +16,13 @@ license=('GPL-3.0-only')
 # Runtime components the session spawns (minimal WMDE edition: comp, settings-daemon,
 # notifications, panel, bg, applets/files-applet, osd). The start-menu is a panel applet
 # (loaded by the panel, not spawned here); orca is optional a11y.
+# avahi: mDNS/DNS-SD daemon. wmde-files' network:/// device discovery needs a running
+# avahi-daemon; the install hook below enables it (a desktop-level policy for WMDE).
 depends=('bash' 'wmde-comp' 'wmde-settings-daemon' 'wmde-notifications' 'wmde-panel'
          'wmde-bg' 'wmde-applets' 'wmde-files' 'wmde-osd' 'wmde-start-menu' 'wmde-icons'
-         'wmde-portal' 'libgcc' 'glibc' 'xorg-xwayland' 'xdg-user-dirs')
+         'wmde-portal' 'libgcc' 'glibc' 'xorg-xwayland' 'xdg-user-dirs' 'avahi')
 makedepends=('rust' 'cargo' 'just' 'git' 'clang' 'lld')
+install="$pkgname.install"
 source=("$pkgname::git+https://github.com/Lin-WMDE/wmde-session.git#branch=wmde")
 sha256sums=('SKIP')
 

@@ -1,0 +1,18 @@
+# WMDE: the file manager's network:/// device discovery (mDNS/DNS-SD) needs a running
+# avahi-daemon. Enable it as a desktop-level policy so a clean install populates the
+# network neighbourhood out of the box. `--now` starts it immediately on a live system;
+# in a chroot/image build (no running systemd) the `|| true` keeps the transaction clean.
+
+_enable_avahi() {
+    systemctl enable --now avahi-daemon.service &>/dev/null \
+        || systemctl enable avahi-daemon.service &>/dev/null \
+        || true
+}
+
+post_install() {
+    _enable_avahi
+}
+
+post_upgrade() {
+    _enable_avahi
+}
