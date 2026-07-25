@@ -39,20 +39,14 @@ export QT_AUTO_SCREEN_SCALE_FACTOR=1
 export QT_ENABLE_HIGHDPI_SCALING=1
 export DCONF_PROFILE=wmde
 
-# Set the QT platform theme to CuteCosmic. Fallback to qt6ct if CuteCosmic is not installed.
+# Set the Qt platform theme so Qt apps read the palette wmde-settings-daemon writes into
+# ~/.config/qt5ct and ~/.config/qt6ct. One value covers both toolkits: qt5ct declares the
+# plugin key "qt5ct" and qt6ct declares both "qt6ct" and "qt5ct".
+# Deliberate divergence from upstream cosmic-session, which probes for the "cosmic" key:
+# that key belongs to CuteCosmic, which is not packaged for Arch and reads the
+# com.system76.CosmicTheme config rather than our fun.wmde.Theme one.
 if [ -z "$QT_QPA_PLATFORMTHEME" ]; then
-    export QT_QPA_PLATFORMTHEME=cosmic
-    for QT_PLUGIN_PATH in /usr/lib{*,/*}/qt6/plugins; do
-        if [ -f "${QT_PLUGIN_PATH}/platformthemes/libcutecosmictheme.so" ]; then
-            # CuteCosmic found, no need for a fallback.
-            export QT_QPA_PLATFORMTHEME=cosmic
-            break
-        elif [ -f "${QT_PLUGIN_PATH}/platformthemes/libqt6ct.so" ] || [ -f "${QT_PLUGIN_PATH}/platformthemes/libqt5ct.so" ]; then
-            # Fallback to qt6ct, but keep looking for CuteCosmic.
-            # Note that "qt5ct" is compatible with both qt5ct and qt6ct.
-            export QT_QPA_PLATFORMTHEME=qt5ct
-        fi
-    done
+    export QT_QPA_PLATFORMTHEME=qt5ct
 fi
 
 # Start gnome keyring components if the daemon is active

@@ -21,6 +21,12 @@ license=('GPL-3.0-only')
 depends=('bash' 'wmde-comp' 'wmde-settings-daemon' 'wmde-notifications' 'wmde-panel'
          'wmde-bg' 'wmde-applets' 'wmde-files' 'wmde-osd' 'wmde-start-menu' 'wmde-icons'
          'wmde-portal' 'libgcc' 'glibc' 'xorg-xwayland' 'xdg-user-dirs' 'avahi')
+# start-wmde exports QT_QPA_PLATFORMTHEME=qt5ct, a plugin key served by qt5ct (Qt5) and by
+# qt6ct (Qt6). wmde-settings-daemon writes the WMDE palette into ~/.config/qt{5,6}ct; without
+# one of these plugins installed nothing reads it. qt6ct is a hard dep of the wmde-desktop
+# metapackage; Qt5 is legacy, so qt5ct stays optional here.
+optdepends=('qt6ct: WMDE palette in Qt6 and KDE applications'
+            'qt5ct: WMDE palette in Qt5 applications')
 makedepends=('rust' 'cargo' 'just' 'git' 'clang' 'lld')
 install="$pkgname.install"
 source=("$pkgname::git+https://github.com/Lin-WMDE/wmde-session.git#branch=wmde")
