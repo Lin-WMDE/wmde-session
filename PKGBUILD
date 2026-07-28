@@ -18,8 +18,10 @@ license=('GPL-3.0-only')
 # (loaded by the panel, not spawned here); orca is optional a11y.
 # avahi: mDNS/DNS-SD daemon. wmde-files' network:/// device discovery needs a running
 # avahi-daemon; the install hook below enables it (a desktop-level policy for WMDE).
+# wmde-icons-base, not wmde-icons: it owns the WMDE/WMDE-Dark themes and pulls wmde-icons
+# (WMDE-Extra) in as its own dependency.
 depends=('bash' 'wmde-comp' 'wmde-settings-daemon' 'wmde-notifications' 'wmde-panel'
-         'wmde-bg' 'wmde-applets' 'wmde-files' 'wmde-osd' 'wmde-start-menu' 'wmde-icons'
+         'wmde-bg' 'wmde-applets' 'wmde-files' 'wmde-osd' 'wmde-start-menu' 'wmde-icons-base'
          'wmde-portal' 'libgcc' 'glibc' 'xorg-xwayland' 'xdg-user-dirs' 'avahi')
 # start-wmde exports QT_QPA_PLATFORMTHEME=qt5ct, a plugin key served by qt5ct (Qt5) and by
 # qt6ct (Qt6). wmde-settings-daemon writes the WMDE palette into ~/.config/qt{5,6}ct; without
