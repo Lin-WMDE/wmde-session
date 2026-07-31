@@ -332,6 +332,15 @@ async fn start(
 	let span = info_span!(parent: None, "wmde-bg");
 	start_component("wmde-bg", span, &process_manager, &env_vars).await;
 
+	// The SCREEN LOCKER, not the greeter: the same wmde-greeter binary picks its role by
+	// comparing the current user against the greeter's system account, so started from here
+	// it comes up as the ext-session-lock client and waits for logind's Lock signal (which is
+	// what `loginctl lock-session` in system_actions.ron sends). It has to be a child of this
+	// process - wmde-greeter's logind handler looks up the session by its PARENT pid, so a
+	// systemd unit would find no session.
+	let span = info_span!(parent: None, "wmde-greeter");
+	start_component("wmde-greeter", span, &process_manager, &env_vars).await;
+
 	// WMDE: ensure the standard XDG user dirs (Desktop, Documents, ...) exist before the
 	// files applet starts. It renders the desktop layer on ~/Desktop but does not create
 	// the folder, and the /etc/xdg/autostart xdg-user-dirs entry only runs in the autostart
