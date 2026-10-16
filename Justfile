@@ -50,6 +50,9 @@ install:
     # dconf profile
     install -Dm644 data/dconf/profile/wmde {{ rootdir }}/{{ wmde_dconf_profile }}
 
+    # VirtualBox clipboard over Wayland, not Xwayland
+    install -Dm0644 data/vboxclient-wayland.conf {{ systemddir }}/app-vboxclient@autostart.service.d/wmde-wayland.conf
+
 # Vendor Cargo dependencies locally
 vendor:
     mkdir -p .cargo
