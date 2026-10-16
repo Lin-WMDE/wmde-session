@@ -1,6 +1,96 @@
 [Default Applications]
 inode/directory=fun.wmde.files.desktop
 inode/mount-point=fun.wmde.files.desktop
+# Text goes to wmde-edit, the notepad, assigned exactly the types that MimeType= of its own
+# desktop entry declares, all in their canonical shared-mime-info form: plain text, empty
+# files, logs and readmes, configuration and data formats, scripts and source code. Text
+# that has an application of its own is left to it - HTML to the browser, CSV and TSV to
+# the spreadsheet, SVG to the viewer, calendars, contacts, mail, playlists, subtitles,
+# rich text - and so are .desktop files, which Files launches.
+text/plain=fun.wmde.Edit.desktop
+application/x-zerosize=fun.wmde.Edit.desktop
+text/x-log=fun.wmde.Edit.desktop
+text/markdown=fun.wmde.Edit.desktop
+text/x-readme=fun.wmde.Edit.desktop
+text/x-changelog=fun.wmde.Edit.desktop
+text/x-authors=fun.wmde.Edit.desktop
+text/x-copying=fun.wmde.Edit.desktop
+text/x-credits=fun.wmde.Edit.desktop
+text/x-install=fun.wmde.Edit.desktop
+text/x-nfo=fun.wmde.Edit.desktop
+text/x-rst=fun.wmde.Edit.desktop
+text/org=fun.wmde.Edit.desktop
+text/x-tex=fun.wmde.Edit.desktop
+text/x-bibtex=fun.wmde.Edit.desktop
+application/json=fun.wmde.Edit.desktop
+application/json5=fun.wmde.Edit.desktop
+application/yaml=fun.wmde.Edit.desktop
+application/toml=fun.wmde.Edit.desktop
+application/xml=fun.wmde.Edit.desktop
+text/x-systemd-unit=fun.wmde.Edit.desktop
+text/x-dbus-service=fun.wmde.Edit.desktop
+text/x-ms-regedit=fun.wmde.Edit.desktop
+text/x-rpm-spec=fun.wmde.Edit.desktop
+text/x-dockerfile=fun.wmde.Edit.desktop
+text/x-meson=fun.wmde.Edit.desktop
+text/x-cmake=fun.wmde.Edit.desktop
+text/x-makefile=fun.wmde.Edit.desktop
+text/x-gettext-translation=fun.wmde.Edit.desktop
+text/x-gettext-translation-template=fun.wmde.Edit.desktop
+text/x-patch=fun.wmde.Edit.desktop
+text/x-reject=fun.wmde.Edit.desktop
+text/x-csrc=fun.wmde.Edit.desktop
+text/x-chdr=fun.wmde.Edit.desktop
+text/x-c++src=fun.wmde.Edit.desktop
+text/x-c++hdr=fun.wmde.Edit.desktop
+text/x-objcsrc=fun.wmde.Edit.desktop
+text/x-csharp=fun.wmde.Edit.desktop
+text/x-java=fun.wmde.Edit.desktop
+text/x-kotlin=fun.wmde.Edit.desktop
+text/x-scala=fun.wmde.Edit.desktop
+text/x-groovy=fun.wmde.Edit.desktop
+text/x-go=fun.wmde.Edit.desktop
+text/rust=fun.wmde.Edit.desktop
+text/x-python=fun.wmde.Edit.desktop
+text/x-python3=fun.wmde.Edit.desktop
+text/javascript=fun.wmde.Edit.desktop
+application/typescript=fun.wmde.Edit.desktop
+text/css=fun.wmde.Edit.desktop
+text/x-scss=fun.wmde.Edit.desktop
+text/x-sass=fun.wmde.Edit.desktop
+text/x-shellscript=fun.wmde.Edit.desktop
+application/x-fishscript=fun.wmde.Edit.desktop
+application/x-powershell=fun.wmde.Edit.desktop
+application/x-bat=fun.wmde.Edit.desktop
+application/x-perl=fun.wmde.Edit.desktop
+application/x-php=fun.wmde.Edit.desktop
+application/x-ruby=fun.wmde.Edit.desktop
+text/x-lua=fun.wmde.Edit.desktop
+text/tcl=fun.wmde.Edit.desktop
+application/sql=fun.wmde.Edit.desktop
+text/x-haskell=fun.wmde.Edit.desktop
+text/x-ocaml=fun.wmde.Edit.desktop
+text/x-erlang=fun.wmde.Edit.desktop
+text/x-elixir=fun.wmde.Edit.desktop
+text/x-nim=fun.wmde.Edit.desktop
+text/x-nix=fun.wmde.Edit.desktop
+text/x-vala=fun.wmde.Edit.desktop
+text/x-qml=fun.wmde.Edit.desktop
+text/x-dsrc=fun.wmde.Edit.desktop
+text/x-fortran=fun.wmde.Edit.desktop
+text/x-pascal=fun.wmde.Edit.desktop
+text/x-asm=fun.wmde.Edit.desktop
+text/x-matlab=fun.wmde.Edit.desktop
+text/julia=fun.wmde.Edit.desktop
+text/x-common-lisp=fun.wmde.Edit.desktop
+text/x-emacs-lisp=fun.wmde.Edit.desktop
+text/x-scheme=fun.wmde.Edit.desktop
+application/x-gdscript=fun.wmde.Edit.desktop
+text/x-verilog=fun.wmde.Edit.desktop
+text/x-vhdl=fun.wmde.Edit.desktop
+text/x-devicetree-source=fun.wmde.Edit.desktop
+text/x-blueprint=fun.wmde.Edit.desktop
+application/x-m4=fun.wmde.Edit.desktop
 # Pictures go to wmde-viewer, assigned only the types that MimeType= of its own desktop
 # entry declares: claiming a type the application cannot decode replaces the ordinary
 # "open with" dialog with an error. It takes every type it declares, aliases written in
