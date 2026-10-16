@@ -365,6 +365,11 @@ async fn start(
 	let span = info_span!(parent: None, "wmde-files-applet");
 	start_component("wmde-files-applet", span, &process_manager, &env_vars).await;
 
+	// Started from here, not as a unit: its `loginctl lock-session` finds the session through
+	// the XDG_SESSION_ID that children of this process inherit.
+	let span = info_span!(parent: None, "wmde-idle");
+	start_component("wmde-idle", span, &process_manager, &env_vars).await;
+
 	#[cfg(feature = "autostart")]
 	if !*is_systemd_used() {
 		info!("looking for autostart folders");

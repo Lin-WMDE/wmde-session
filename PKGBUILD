@@ -14,7 +14,7 @@ arch=('x86_64')
 url="https://wmde.fun"
 license=('GPL-3.0-only')
 # Runtime components the session spawns (minimal WMDE edition: comp, settings-daemon,
-# notifications, panel, bg, applets/files-applet, osd). The start-menu is a panel applet
+# notifications, panel, bg, applets/files-applet, osd, idle). The start-menu is a panel applet
 # (loaded by the panel, not spawned here); orca is optional a11y.
 # avahi: mDNS/DNS-SD daemon. wmde-files' network:/// device discovery needs a running
 # avahi-daemon; the install hook below enables it (a desktop-level policy for WMDE).
@@ -24,6 +24,8 @@ license=('GPL-3.0-only')
 # lock-session` is dead without it. That package is only the locker; the display manager
 # is wmde-greeter-dm, which nothing depends on, so a machine logging in through GDM or a
 # TTY never gets a second display manager forced on it.
+# wmde-idle turns the screen off, locks and suspends on inactivity with the timeouts of
+# the Power page, and owns org.freedesktop.ScreenSaver; without it the screen never blanks.
 # wmde-screenshot is here for the same reason as wmde-greeter: the compositor binds Print
 # to it and wmde-portal forwards every screenshot request from other applications to it,
 # so both are dead without the package installed.
@@ -36,7 +38,7 @@ license=('GPL-3.0-only')
 # replaces it.
 depends=('bash' 'wmde-comp' 'wmde-settings-daemon' 'wmde-notifications' 'wmde-panel'
          'wmde-bg' 'wmde-applets' 'wmde-files' 'wmde-osd' 'wmde-start-menu' 'wmde-icons-base'
-         'wmde-portal' 'wmde-screenshot' 'wmde-viewer' 'wmde-greeter' 'libgcc'
+         'wmde-portal' 'wmde-screenshot' 'wmde-viewer' 'wmde-greeter' 'wmde-idle' 'libgcc'
          'glibc' 'xorg-xwayland' 'xdg-user-dirs' 'avahi')
 # start-wmde exports QT_QPA_PLATFORMTHEME=qt5ct, a plugin key served by qt5ct (Qt5) and by
 # qt6ct (Qt6). wmde-settings-daemon writes the WMDE palette into ~/.config/qt{5,6}ct; without
